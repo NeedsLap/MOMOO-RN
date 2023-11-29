@@ -51,5 +51,8 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+  
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>인생네컷을 올리기 위해 사진첩 권한이 필요합니다.</string>
 </dict>
 </plist>
