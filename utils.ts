@@ -35,7 +35,11 @@ class PermissionUtil {
         result['ios.permission.PHOTO_LIBRARY'] === RESULTS.GRANTED ||
         result['android.permission.READ_EXTERNAL_STORAGE'] ===
           RESULTS.GRANTED ||
-        result['android.permission.READ_MEDIA_IMAGES'] === RESULTS.GRANTED
+        result['android.permission.READ_MEDIA_IMAGES'] === RESULTS.GRANTED ||
+        result['ios.permission.PHOTO_LIBRARY'] === RESULTS.LIMITED ||
+        result['android.permission.READ_EXTERNAL_STORAGE'] ===
+          RESULTS.LIMITED ||
+        result['android.permission.READ_MEDIA_IMAGES'] === RESULTS.LIMITED
       ) {
         console.log('권한이 허용되었습니다');
       } else {
