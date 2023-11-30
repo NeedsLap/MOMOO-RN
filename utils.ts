@@ -39,11 +39,19 @@ class PermissionUtil {
       ) {
         console.log('권한이 허용되었습니다');
       } else {
-        Alert.alert('인생네컷을 올리기 위해 사진첩 권한을 허용해주세요');
-        Linking.openSettings(); // 핸드폰 상 설정 페이지
+        Alert.alert('인생네컷을 올리기 위해 사진첩 권한을 허용해주세요', '', [
+          {text: '취소', onPress: () => {}},
+          {
+            text: '설정',
+            style: 'default',
+            onPress: () => {
+              Linking.openSettings();
+            },
+          },
+        ]);
       }
     } catch (err) {
-      Alert.alert('사진접 사용 권한 요청 에러');
+      Alert.alert('사진첩 사용 권한 요청 에러');
       console.warn(err);
     }
   };
