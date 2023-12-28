@@ -6,7 +6,7 @@ import PermissionUtil from './utils';
 function App(): JSX.Element {
   useEffect(() => {
     const permisionUtil = new PermissionUtil();
-    permisionUtil.cmmReqPhotoLibraryPermission();
+    permisionUtil.handlePermissionToUploadPhoto();
   }, []);
 
   return (
