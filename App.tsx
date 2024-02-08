@@ -30,6 +30,22 @@ export default function App(): JSX.Element {
     };
   }, [isCanGoBack]);
 
+  const webviewJavaScript = `
+    const wrap = (fn) => {
+      return function() {
+        window.ReactNativeWebView.postMessage('navigationStateChange');
+        return fn.apply(this, arguments);
+      }
+    }
+
+    history.pushState = wrap(history.pushState);
+    history.replaceState = wrap(history.replaceState);
+    
+    window.addEventListener('popstate', () => {
+      window.ReactNativeWebView.postMessage('navigationStateChange');
+    });
+  `;
+
   return (
     <SafeAreaView style={styles.container}>
       <WebView
@@ -41,25 +57,7 @@ export default function App(): JSX.Element {
         source={{
           uri: 'https://momoo-e22ab.web.app/',
         }}
-        injectedJavaScript={`
-        (function() {
-          function wrap(fn) {
-            return function wrapper() {
-              var res = fn.apply(this, arguments);
-              window.ReactNativeWebView.postMessage('navigationStateChange');
-              return res;
-            }
-          }
-    
-          history.pushState = wrap(history.pushState);
-          history.replaceState = wrap(history.replaceState);
-          window.addEventListener('popstate', function() {
-            window.ReactNativeWebView.postMessage('navigationStateChange');
-          });
-        })();
-    
-        true;
-      `}
+        injectedJavaScript={webviewJavaScript}
         onMessage={({nativeEvent: state}) => {
           if (state.data === 'navigationStateChange') {
             setIsCanGoBack(state.canGoBack);
