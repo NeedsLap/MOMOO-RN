@@ -55,7 +55,7 @@ export default function App(): JSX.Element {
           }
         }}
         source={{
-          uri: 'https://momoo-e22ab.web.app/',
+          uri: 'https://momoo.kr/',
         }}
         injectedJavaScript={webviewJavaScript}
         onMessage={({nativeEvent: state}) => {
