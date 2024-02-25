@@ -4,12 +4,12 @@ import {BackHandler} from 'react-native';
 import WebView from 'react-native-webview';
 
 export default function App(): JSX.Element {
-  const webview = useRef<WebView<{}>>();
+  const webviewRef = useRef<WebView<{}> | null>(null);
   const [isCanGoBack, setIsCanGoBack] = useState(false);
 
   const onPressHardwareBackButton = () => {
-    if (webview.current && isCanGoBack) {
-      webview.current.goBack();
+    if (webviewRef.current) {
+      webviewRef.current.goBack();
       return true;
     } else {
       return false;
@@ -17,6 +17,8 @@ export default function App(): JSX.Element {
   };
 
   useEffect(() => {
+    if (!isCanGoBack) return;
+
     BackHandler.addEventListener(
       'hardwareBackPress',
       onPressHardwareBackButton,
@@ -33,11 +35,12 @@ export default function App(): JSX.Element {
   const webviewJavaScript = `
     const wrap = (fn) => {
       return function() {
+        let res = fn.apply(this, arguments);
         window.ReactNativeWebView.postMessage('navigationStateChange');
-        return fn.apply(this, arguments);
+        return res;
       }
     }
-
+  
     history.pushState = wrap(history.pushState);
     history.replaceState = wrap(history.replaceState);
     
@@ -49,11 +52,7 @@ export default function App(): JSX.Element {
   return (
     <SafeAreaView style={styles.container}>
       <WebView
-        ref={node => {
-          if (node) {
-            webview.current = node;
-          }
-        }}
+        ref={webviewRef}
         source={{
           uri: 'https://momoo.kr/',
         }}
