@@ -6,18 +6,27 @@ import WebView from 'react-native-webview';
 export default function App(): JSX.Element {
   const webviewRef = useRef<WebView<{}> | null>(null);
   const [isCanGoBack, setIsCanGoBack] = useState(false);
-
-  const onPressHardwareBackButton = () => {
-    if (webviewRef.current) {
-      webviewRef.current.goBack();
-      return true;
-    } else {
-      return false;
-    }
-  };
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    if (!isCanGoBack) return;
+    if (!isCanGoBack && !isModalOpen) {
+      return;
+    }
+
+    const onPressHardwareBackButton = () => {
+      if (webviewRef.current && isModalOpen) {
+        setIsModalOpen(false);
+        webviewRef.current.postMessage('closeModal');
+        return true;
+      }
+
+      if (webviewRef.current) {
+        webviewRef.current.goBack();
+        return true;
+      }
+
+      return false;
+    };
 
     BackHandler.addEventListener(
       'hardwareBackPress',
@@ -30,7 +39,7 @@ export default function App(): JSX.Element {
         onPressHardwareBackButton,
       );
     };
-  }, [isCanGoBack]);
+  }, [isCanGoBack, isModalOpen]);
 
   const webviewJavaScript = `
     const wrap = (fn) => {
@@ -60,6 +69,12 @@ export default function App(): JSX.Element {
         onMessage={({nativeEvent: state}) => {
           if (state.data === 'navigationStateChange') {
             setIsCanGoBack(state.canGoBack);
+          }
+          if (state.data === 'openModal') {
+            setIsModalOpen(true);
+          }
+          if (state.data === 'closeModal') {
+            setIsModalOpen(false);
           }
         }}
       />
