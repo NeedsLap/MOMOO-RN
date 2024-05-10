@@ -3,7 +3,7 @@ WebView를 사용하여 React로 개발된 MOMOO 웹을 앱에 임베딩했습�
 <br>
 <br>
 **웹사이트** [momoo.kr](momoo.kr)<br>
-**플레이스토어** 출시 준비 중
+**플레이스토어** [바로가기](https://play.google.com/store/apps/details?id=com.momoo&hl=en-KR)
 <br>
 <br>
 
